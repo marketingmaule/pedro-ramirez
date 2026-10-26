@@ -1,0 +1,10 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Pedro Ramírez Pinto
+ORG:Muebles Ramírez
+TITLE:Vendedor
+TEL;TYPE=CELL:+56987654321
+EMAIL:pramirez@gmail.com
+ADR;TYPE=WORK:;;;Talca;;;Chile
+URL:https://www.facebook.com/pramirez/
+END:VCARD

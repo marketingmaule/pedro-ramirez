@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedro Ramírez Pinto - Tarjeta Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0f172a;--slate:#1e293b;--muted:#64748b;--line:#e2e8f0;--soft:#f1f5f9;}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
+html,body{min-height:100%;}
+body{background:#eef1f5;min-height:100vh;min-height:100dvh;display:flex;justify-content:center;align-items:center;padding:10px;color:var(--slate);}
+.escala{width:100%;max-width:420px;}
+.card{width:100%;background:#fff;border-radius:24px;padding:16px 16px 12px;box-shadow:0 12px 32px rgba(15,23,42,.10);transform-origin:top center;}
+.topbar{display:flex;height:4px;border-radius:99px;overflow:hidden;margin-bottom:10px;}
+.topbar span{flex:1;}
+.topbar span:nth-child(1){background:#111827;}
+.topbar span:nth-child(2){background:#8c96a3;}
+.topbar span:nth-child(3){background:#dde1e7;}
+.info-box{border:1px solid var(--line);border-radius:16px;padding:12px 16px;margin-bottom:8px;}
+.head{display:flex;justify-content:flex-end;align-items:center;margin-bottom:6px;}
+.head img{max-height:52px;max-width:150px;object-fit:contain;}
+.head .emoji{font-size:2.2rem;line-height:1;}
+.id-row{display:flex;gap:12px;align-items:flex-start;}
+.id-text{flex:1;min-width:0;}
+.foto{width:92px;height:116px;flex-shrink:0;object-fit:cover;object-position:50% 18%;border-radius:14px;background:var(--soft);box-shadow:0 2px 8px rgba(15,23,42,.15);}
+h1{font-size:1.45rem;line-height:1.15;font-weight:800;color:var(--ink);margin-bottom:4px;word-break:break-word;}
+.cargo{font-size:1rem;font-weight:600;color:var(--slate);}
+.empresa{font-size:.88rem;font-weight:500;color:#475569;margin-top:1px;}
+.titulo{font-size:.88rem;color:var(--muted);margin-top:1px;}
+.divider{height:1px;background:var(--line);margin:10px 0 9px;}
+.lista{display:flex;flex-direction:column;gap:7px;}
+.item{display:flex;align-items:flex-start;gap:10px;font-size:.95rem;font-weight:500;color:var(--slate);text-decoration:none;word-break:break-word;}
+.item .ico{width:22px;text-align:center;flex-shrink:0;}
+.item .fit{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;word-break:normal;}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 10px;border-radius:12px;border:1px solid transparent;font-size:1rem;font-weight:700;text-decoration:none;cursor:pointer;margin-bottom:8px;}
+.btn-dark{background:#1e293b;color:#fff;}
+.btn-wa{background:#25d366;color:#fff;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.grid .btn{margin-bottom:0;padding:10px 6px;font-size:.9rem;font-weight:600;background:var(--soft);border-color:var(--line);color:var(--slate);}
+.grid .btn:last-child:nth-child(odd){grid-column:span 2;}
+.btn-pay{background:#fff;border:2px solid #1e293b;color:#1e293b;padding:9px 10px;}
+.qr-sec{border-top:1px solid var(--line);margin-top:2px;padding-top:10px;display:flex;align-items:center;justify-content:center;gap:14px;}
+.qr-title{font-size:.72rem;font-weight:700;letter-spacing:.12em;color:#64748b;line-height:1.5;text-align:left;}
+.qr-box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:6px;}
+#qrcode{width:112px;height:112px;}
+#qrcode img,#qrcode canvas{display:block;width:112px;height:112px;}
+.foot{text-align:center;font-size:.72rem;color:#94a3b8;margin-top:8px;}
+.fondo{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,.45);z-index:10;}
+.fondo.abierto{display:block;}
+.sheet{display:none;position:fixed;left:0;right:0;bottom:0;margin:0 auto;width:100%;max-width:440px;max-height:85vh;overflow:auto;background:#fff;border-radius:20px 20px 0 0;padding:14px 16px 18px;z-index:11;box-shadow:0 -8px 30px rgba(15,23,42,.2);}
+.sheet.abierto{display:block;}
+.sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;}
+.sheet-title{font-weight:800;font-size:1.05rem;color:var(--ink);}
+.sheet-close{border:none;background:var(--soft);width:34px;height:34px;border-radius:50%;font-size:1.1rem;cursor:pointer;color:var(--slate);}
+.pay-row{padding:9px 0;border-bottom:1px solid var(--line);}
+.pay-label{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+.pay-value{font-size:1rem;font-weight:600;color:var(--ink);word-break:break-word;}
+.sheet .copy-all{margin:14px 0 0;padding:13px;font-size:1rem;}
+.ok{background:#dcfce7 !important;color:#166534 !important;border-color:#86efac !important;}
+</style>
+</head>
+<body>
+<div class="escala" id="escala">
+  <div class="card" id="tarjeta">
+    <div class="topbar"><span></span><span></span><span></span></div>
+    <div class="info-box">
+      <div class="head"><img src="logo_pedro_ramirez.png" alt="Logo Muebles Ramírez" onerror="this.style.display='none'"></div><h1>Pedro Ramírez Pinto</h1>
+      <div class="cargo">Vendedor</div>
+      <div class="empresa">Muebles Ramírez</div>
+      <div class="divider"></div>
+      <div class="lista">
+        <a class="item" href="tel:+56987654321"><span class="ico">📞</span><span class="fit">+56 9 8765 4321</span></a>
+        <a class="item" href="mailto:pramirez@gmail.com"><span class="ico">✉️</span><span class="fit">pramirez@gmail.com</span></a>
+        <div class="item"><span class="ico">📍</span><span>Talca</span></div>
+      </div>
+    </div>
+    <a class="btn btn-dark" href="contacto_pedro_ramirez.vcf" download>📇 Guardar en Contactos</a>
+    <a class="btn btn-wa" href="https://wa.me/56987654321" target="_blank" rel="noopener">💬 Mensaje por WhatsApp</a>
+    <div class="grid">
+      <a class="btn" href="mailto:pramirez@gmail.com">✉️ Correo</a>
+      <a class="btn" href="https://www.facebook.com/pramirez/" target="_blank" rel="noopener">🔗 Facebook</a>
+      <a class="btn" href="tel:+56987654321">📞 Llamar</a>
+    </div>
+    <button type="button" class="btn btn-pay" id="btnPago" aria-expanded="false" aria-controls="panelPago">💳 Datos de transferencia</button>
+    <div class="qr-sec" id="qrSec">
+      <div class="qr-box"><div id="qrcode"></div></div>
+      <div class="qr-title">ESCANEAR<br>PARA<br>COMPARTIR</div>
+    </div>
+    <div class="foot">© Contacto Pedro Ramírez Pinto</div>
+  </div>
+</div>
+<div class="fondo" id="fondoPago"></div>
+<div class="sheet" id="panelPago" role="dialog" aria-label="Datos de transferencia">
+  <div class="sheet-head"><div class="sheet-title">💳 Datos de transferencia</div><button type="button" class="sheet-close" id="cerrarPago" aria-label="Cerrar">✕</button></div>
+  <div class="pay-row"><div class="pay-label">Nombre</div><div class="pay-value">Pedro Ramírez Pinto</div></div>
+  <div class="pay-row"><div class="pay-label">RUT</div><div class="pay-value">12.345.678-9</div></div>
+  <div class="pay-row"><div class="pay-label">Banco</div><div class="pay-value">BancoEstado</div></div>
+  <div class="pay-row"><div class="pay-label">Tipo de cuenta</div><div class="pay-value">Cuenta RUT</div></div>
+  <div class="pay-row"><div class="pay-label">N° de cuenta</div><div class="pay-value">12.345.678</div></div>
+  <div class="pay-row"><div class="pay-label">Email</div><div class="pay-value">pramirez@gmail.com</div></div>
+  <button type="button" class="btn btn-dark copy-all" data-copy="Nombre: Pedro Ramírez Pinto&#10;RUT: 12.345.678-9&#10;Banco: BancoEstado&#10;Tipo de cuenta: Cuenta RUT&#10;N° de cuenta: 12.345.678&#10;Email: pramirez@gmail.com">📋 Copiar todos los datos</button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(function () {
+  function ajustar() {
+    var c = document.getElementById('tarjeta');
+    var w = document.getElementById('escala');
+    if (!c || !w) return;
+    c.style.transform = 'none';
+    var fits = document.querySelectorAll('.fit');
+    for (var k = 0; k < fits.length; k++) {
+      var el = fits[k];
+      el.style.fontSize = '';
+      var fs = parseFloat(window.getComputedStyle(el).fontSize);
+      while (el.scrollWidth > el.clientWidth && fs > 10) {
+        fs -= 0.5;
+        el.style.fontSize = fs + 'px';
+      }
+    }
+    var h = c.offsetHeight;
+    var s = Math.max(0.62, Math.min(1, (window.innerHeight - 20) / h));
+    c.style.transform = s < 1 ? 'scale(' + s + ')' : 'none';
+    w.style.height = Math.ceil(h * s) + 'px';
+  }
+  window.addEventListener('resize', ajustar);
+  window.addEventListener('orientationchange', ajustar);
+  window.addEventListener('load', ajustar);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(ajustar);
+  ajustar();
+
+  function fallback(texto, ok) {
+    var t = document.createElement('textarea');
+    t.value = texto;
+    t.setAttribute('readonly', '');
+    t.style.position = 'fixed';
+    t.style.opacity = '0';
+    document.body.appendChild(t);
+    t.select();
+    t.setSelectionRange(0, 99999);
+    try { document.execCommand('copy'); ok(); } catch (e) { window.prompt('Copia los datos:', texto); }
+    document.body.removeChild(t);
+  }
+  function copiar(texto, btn) {
+    var original = btn.getAttribute('data-label') || btn.textContent;
+    btn.setAttribute('data-label', original);
+    var ok = function () {
+      btn.textContent = '✓ Datos copiados';
+      btn.classList.add('ok');
+      setTimeout(function () { btn.textContent = original; btn.classList.remove('ok'); }, 1800);
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(texto).then(ok, function () { fallback(texto, ok); });
+    } else {
+      fallback(texto, ok);
+    }
+  }
+  var botones = document.querySelectorAll('[data-copy]');
+  for (var i = 0; i < botones.length; i++) {
+    botones[i].addEventListener('click', function () { copiar(this.getAttribute('data-copy'), this); });
+  }
+
+  var bp = document.getElementById('btnPago');
+  var pp = document.getElementById('panelPago');
+  var fp = document.getElementById('fondoPago');
+  var cp = document.getElementById('cerrarPago');
+  function abrirPago(v) {
+    if (!pp || !fp) return;
+    pp.classList.toggle('abierto', v);
+    fp.classList.toggle('abierto', v);
+    if (bp) bp.setAttribute('aria-expanded', v ? 'true' : 'false');
+  }
+  if (bp) bp.addEventListener('click', function () { abrirPago(true); });
+  if (cp) cp.addEventListener('click', function () { abrirPago(false); });
+  if (fp) fp.addEventListener('click', function () { abrirPago(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') abrirPago(false); });
+
+  var qr = document.getElementById('qrcode');
+  if (qr) {
+    try {
+      var url = location.href.split('#')[0].split('?')[0];
+      new QRCode(qr, { text: url, width: 112, height: 112, correctLevel: QRCode.CorrectLevel.M });
+    } catch (e) {
+      var sec = document.getElementById('qrSec');
+      if (sec) sec.style.display = 'none';
+      ajustar();
+    }
+  }
+})();
+</script>
+</body>
+</html>
